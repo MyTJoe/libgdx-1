@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import static com.badlogic.gdx.Input.Keys.SPACE;
+
 public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private TextureRegion down, up, right, left;
@@ -66,11 +68,21 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	public void move() {
-		if(Gdx.input.isKeyPressed(UP)) {
-		yv = MAX_VELOCITY;
-		facing = UP;
-		if(Gdx.input.isKeyPressed(SPACE))
-	}
+		if (Gdx.input.isKeyPressed(UP)) {
+			yv = MAX_VELOCITY;
+			facing = UP;
+			if (Gdx.input.isKeyPressed(SPACE)) {
+				yv *= 3;
+			}
+		}
+		if (Gdx.input.isKeyPressed(DOWN)) {
+			yv = MAX_VELOCITY; // yv = MAX_VELOCITY * -1;
+			facing = DOWN;
+			if (Gdx.input.isKeyPressed(SPACE)) {
+				yv *= MAX_VELOCITY * -3;
+			}
+		}
+
 		y += yv * Gdx.graphics.getDeltaTime();
 		x += xv * Gdx.graphics.getDeltaTime();
 
@@ -79,7 +91,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	@Override
-	public void dispose () {
+	public void dispose() {
 		batch.dispose();
 	}
 }
