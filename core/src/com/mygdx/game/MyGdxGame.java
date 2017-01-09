@@ -2,20 +2,20 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import static com.badlogic.gdx.Input.Keys.SPACE;
-
 public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
-	private TextureRegion down, up, right, left;
+	private TextureRegion down, up, right, left, stand;
 	private int facing;
 	private float time;
 
-	private float x, y, yv, xv;
+	private float x, y, yv, xv = 0;
 	private static float MAX_VELOCITY = 100;
 
 	public static final int UP = 1;
@@ -28,6 +28,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		Texture tiles = new Texture("tiles.png");
 		TextureRegion[][] grid = TextureRegion.split(tiles, 16, 16);
+		stand = grid[6][2];
 		down = grid[6][0];
 		up = grid[6][1];
 		right = grid[6][3];
@@ -37,12 +38,13 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		time += Gdx.graphics.getDeltaTime();
 		move();
-		TextureRegion img = down;
 
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		TextureRegion img = up;
+		time += Gdx.graphics.getDeltaTime();
 		batch.begin();
 		batch.draw(img, x, y);
 
@@ -68,17 +70,31 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	public void move() {
-		if (Gdx.input.isKeyPressed(UP)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			yv = MAX_VELOCITY;
 			facing = UP;
-			if (Gdx.input.isKeyPressed(SPACE)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
 				yv *= 3;
 			}
 		}
-		if (Gdx.input.isKeyPressed(DOWN)) {
-			yv = MAX_VELOCITY; // yv = MAX_VELOCITY * -1;
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+			yv = MAX_VELOCITY * -1; // yv = MAX_VELOCITY * -1;
 			facing = DOWN;
-			if (Gdx.input.isKeyPressed(SPACE)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+				yv *= MAX_VELOCITY * -3;
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+			xv = MAX_VELOCITY;
+			facing = RIGHT;
+			if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+				yv *= MAX_VELOCITY * 3;
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+			xv = MAX_VELOCITY * -1;
+			facing = LEFT;
+			if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
 				yv *= MAX_VELOCITY * -3;
 			}
 		}
